@@ -17,6 +17,16 @@ class GildedRoseTest {
     }
 
     @Test
+    void plainItemWithPositiveSellInDate_notBelowZero() {
+        Item[] items = new Item[]{new Item("plain cloth pants", 1, 0)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("plain cloth pants", app.items[0].name);
+        assertEquals(0, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
     void plainItemWithNegativeSellInDate_doubleDegradation() {
         Item[] items = new Item[]{new Item("plain cloth pants", -1, 10)};
         GildedRose app = new GildedRose(items);
@@ -27,6 +37,16 @@ class GildedRoseTest {
     }
 
     @Test
+    void plainItemWithNegativeSellInDate_notBelowZero() {
+        Item[] items = new Item[]{new Item("plain cloth pants", -1, 1)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("plain cloth pants", app.items[0].name);
+        assertEquals(-2, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
     void plainItemWithZeroSellInDate_doubleDegradation() {
         Item[] items = new Item[]{new Item("plain cloth pants", 0, 10)};
         GildedRose app = new GildedRose(items);
@@ -34,6 +54,16 @@ class GildedRoseTest {
         assertEquals("plain cloth pants", app.items[0].name);
         assertEquals(-1, app.items[0].sellIn);
         assertEquals(8, app.items[0].quality);
+    }
+
+    @Test
+    void plainItemWithZeroSellInDate_notBelowZero() {
+        Item[] items = new Item[]{new Item("plain cloth pants", 0, 0)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("plain cloth pants", app.items[0].name);
+        assertEquals(-1, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
     }
 
     @Test
@@ -123,6 +153,66 @@ class GildedRoseTest {
         app.updateQuality();
         assertEquals("Backstage passes to a Rammstein concert", app.items[0].name);
         assertEquals(-1, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
+    void conjuredItemPositiveSellInDate_degradesBy2() {
+        Item[] items = new Item[]{new Item("Conjured Muffin", 4, 10)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Conjured Muffin", app.items[0].name);
+        assertEquals(3, app.items[0].sellIn);
+        assertEquals(8, app.items[0].quality);
+    }
+
+    @Test
+    void conjuredItemPositiveSellInDate_NotBelowZero() {
+        Item[] items = new Item[]{new Item("Conjured Sourdough", 4, 1)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Conjured Sourdough", app.items[0].name);
+        assertEquals(3, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
+    void conjuredItemZeroSellInDate_degradesBy4() {
+        Item[] items = new Item[]{new Item("Conjured Crystal Water", 0, 10)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Conjured Crystal Water", app.items[0].name);
+        assertEquals(-1, app.items[0].sellIn);
+        assertEquals(6, app.items[0].quality);
+    }
+
+    @Test
+    void conjuredItemZeroSellInDate_NotBelowZero() {
+        Item[] items = new Item[]{new Item("Conjured Glacier Water", 0, 1)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Conjured Glacier Water", app.items[0].name);
+        assertEquals(-1, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
+    void conjuredItemNegativeSellInDate_degradesBy4() {
+        Item[] items = new Item[]{new Item("Conjured Croissant", -3, 10)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Conjured Croissant", app.items[0].name);
+        assertEquals(-4, app.items[0].sellIn);
+        assertEquals(6, app.items[0].quality);
+    }
+
+    @Test
+    void conjuredItemNegativeSellInDate_notBelowZero() {
+        Item[] items = new Item[]{new Item("Conjured Sweet Roll", -3, 2)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Conjured Sweet Roll", app.items[0].name);
+        assertEquals(-4, app.items[0].sellIn);
         assertEquals(0, app.items[0].quality);
     }
 

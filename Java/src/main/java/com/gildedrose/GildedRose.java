@@ -15,6 +15,8 @@ class GildedRose {
                 updateBackstagePasses(item);
             } else if (item.name.startsWith("Sulfuras")) {
                 updateSulfuras(item);
+            } else if (item.name.startsWith("Conjured")) {
+                updateConjured(item);
             } else {
                 updateCommonItem(item);
             }
@@ -44,6 +46,17 @@ class GildedRose {
     private void updateSulfuras(Item sulfuras) {
         //sulfuras does not need to be updated or sold, setting sellIn to 0
         sulfuras.sellIn = 0;
+    }
+
+    private void updateConjured(Item item) {
+        item.sellIn--;
+        if (item.sellIn >= 0 && item.quality > 1) {
+            item.quality = item.quality - 2;
+        } else if (item.sellIn < 0 && item.quality > 3) {
+            item.quality = item.quality - 4;
+        } else {
+            item.quality = 0;
+        }
     }
 
     private void updateCommonItem(Item item) {
