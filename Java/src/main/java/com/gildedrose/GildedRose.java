@@ -9,54 +9,51 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            if (!item.name.equals("Aged Brie")
-                    && !item.name.startsWith("Backstage passes")) {
-                if (item.quality > 0) {
-                    if (!item.name.startsWith("Sulfuras")) {
-                        item.quality = item.quality - 1;
-                    }
-                }
+            if (item.name.equals("Aged Brie")) {
+                updateAgedBrie(item);
+            } else if (item.name.startsWith("Backstage passes")) {
+                updateBackstagePasses(item);
+            } else if (item.name.startsWith("Sulfuras")) {
+                updateSulfuras(item);
             } else {
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1;
-
-                    if (item.name.startsWith("Backstage passes")) {
-                        if (item.sellIn < 11) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1;
-                            }
-                        }
-
-                        if (item.sellIn < 6) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1;
-                            }
-                        }
-                    }
-                }
+                updateCommonItem(item);
             }
+        }
+    }
 
-            if (!item.name.startsWith("Sulfuras")) {
-                item.sellIn = item.sellIn - 1;
-            }
+    private void updateAgedBrie(Item brie) {
+        brie.sellIn--;
+        if (brie.quality < 50) {
+            brie.quality++;
+        }
+    }
 
-            if (item.sellIn < 0) {
-                if (!item.name.equals("Aged Brie")) {
-                    if (!item.name.startsWith("Backstage passes")) {
-                        if (item.quality > 0) {
-                            if (!item.name.startsWith("Sulfuras")) {
-                                item.quality = item.quality - 1;
-                            }
-                        }
-                    } else {
-                        item.quality = 0;
-                    }
-                } else {
-                    if (item.quality < 50) {
-                        item.quality = item.quality + 1;
-                    }
-                }
-            }
+    private void updateBackstagePasses(Item pass) {
+        pass.sellIn--;
+        if (pass.sellIn < 0) {
+            pass.quality = 0;
+        } else if (pass.sellIn <= 5) {
+            pass.quality = pass.quality + 3;
+        } else if (pass.sellIn <= 10) {
+            pass.quality = pass.quality + 2;
+        } else {
+            pass.quality = pass.quality + 1;
+        }
+    }
+
+    private void updateSulfuras(Item sulfuras) {
+        //sulfuras does not need to be updated or sold, setting sellIn to 0
+        sulfuras.sellIn = 0;
+    }
+
+    private void updateCommonItem(Item item) {
+        item.sellIn--;
+        if (item.sellIn >= 0 && item.quality > 0) {
+            item.quality--;
+        } else if (item.sellIn < 0 && item.quality > 1) {
+            item.quality = item.quality - 2;
+        } else {
+            item.quality = 0;
         }
     }
 }
