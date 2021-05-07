@@ -97,8 +97,48 @@ class GildedRoseTest {
     }
 
     @Test
+    void agedBrieWithNegativeSellInDateQuality50_noIncreasedQuality() {
+        Item[] items = new Item[]{new Item("Aged Brie", -5, 50)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Aged Brie", app.items[0].name);
+        assertEquals(-6, app.items[0].sellIn);
+        assertEquals(50, app.items[0].quality);
+    }
+
+    @Test
+    void agedBrieWithNegativeSellInDate_increasedQualityBy1() {
+        Item[] items = new Item[]{new Item("Aged Brie", -1, 30)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Aged Brie", app.items[0].name);
+        assertEquals(-2, app.items[0].sellIn);
+        assertEquals(31, app.items[0].quality);
+    }
+
+    @Test
     void sulfurasPositiveSellInDate_noDecreasedQualityDateTo0() {
         Item[] items = new Item[]{new Item("Sulfuras, Hand of Ragnaros", 5, 80)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Sulfuras, Hand of Ragnaros", app.items[0].name);
+        assertEquals(0, app.items[0].sellIn);
+        assertEquals(80, app.items[0].quality);
+    }
+
+    @Test
+    void sulfurasPositiveSellInDateQuality70ByAccident_noDecreasedQualityDateTo0QualityTo80() {
+        Item[] items = new Item[]{new Item("Sulfuras, Hand of Ragnaros", 5, 70)};
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Sulfuras, Hand of Ragnaros", app.items[0].name);
+        assertEquals(0, app.items[0].sellIn);
+        assertEquals(80, app.items[0].quality);
+    }
+
+    @Test
+    void sulfurasNegativeSellInDateQuality70ByAccident_noDecreasedQualityDateTo0QualityTo80() {
+        Item[] items = new Item[]{new Item("Sulfuras, Hand of Ragnaros", -5, 70)};
         GildedRose app = new GildedRose(items);
         app.updateQuality();
         assertEquals("Sulfuras, Hand of Ragnaros", app.items[0].name);
@@ -216,4 +256,31 @@ class GildedRoseTest {
         assertEquals(0, app.items[0].quality);
     }
 
+    @Test
+    void multipleItemsHandledCorrectly() {
+        Item[] items = new Item[]{
+                new Item("Conjured Sweet Roll", -3, 2),
+                new Item("Backstage passes to a Rammstein concert", 0, 10),
+                new Item("Sulfuras, the Extinguished Hand", -5, 80),
+                new Item("Aged Brie", -1, 30),
+                new Item("plain cloth pants", 0, 0)
+        };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals("Conjured Sweet Roll", app.items[0].name);
+        assertEquals(-4, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
+        assertEquals("Backstage passes to a Rammstein concert", app.items[1].name);
+        assertEquals(-1, app.items[1].sellIn);
+        assertEquals(0, app.items[1].quality);
+        assertEquals("Sulfuras, the Extinguished Hand", app.items[2].name);
+        assertEquals(0, app.items[2].sellIn);
+        assertEquals(80, app.items[2].quality);
+        assertEquals("Aged Brie", app.items[3].name);
+        assertEquals(-2, app.items[3].sellIn);
+        assertEquals(31, app.items[3].quality);
+        assertEquals("plain cloth pants", app.items[4].name);
+        assertEquals(-1, app.items[4].sellIn);
+        assertEquals(0, app.items[4].quality);
+    }
 }

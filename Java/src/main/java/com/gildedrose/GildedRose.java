@@ -46,6 +46,8 @@ class GildedRose {
     private void updateSulfuras(Item sulfuras) {
         //sulfuras does not need to be updated or sold, setting sellIn to 0
         sulfuras.sellIn = 0;
+        //for good measure, set quality to 80
+        sulfuras.quality = 80;
     }
 
     private void updateConjured(Item item) {
