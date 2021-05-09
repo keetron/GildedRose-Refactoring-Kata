@@ -4,21 +4,30 @@ class GildedRose(var items: Array<Item>) {
 
     fun updateQuality() {
         items.forEach {
-            when (it.name) {
-                "Aged Brie" -> {
+            when {
+                it.name == "Aged Brie" -> {
                     handleAgedBrie(it)
                 }
-                "Backstage passes to a TAFKAL80ETC concert" -> {
+                it.name.startsWith("Backstage passes") -> {
                     handleBackStagePasses(it)
                 }
-                "Sulfuras, Hand of Ragnaros" -> {
-                    //do nothing
+                it.name.startsWith("Sulfuras") -> {
+                    it.sellIn--
+                }
+                it.name.startsWith("Conjured") -> {
+                    handleConjuredItem(it)
                 }
                 else -> {
                     handleOther(it)
                 }
             }
         }
+    }
+
+    private fun handleConjuredItem(item: Item) {
+        item.quality = if (item.sellIn <= 0) item.quality - 4 else item.quality - 2
+        if (item.quality < 0) item.quality = 0
+        item.sellIn--
     }
 
     private fun handleOther(item: Item) {
@@ -51,6 +60,4 @@ class GildedRose(var items: Array<Item>) {
         if (item.quality > 50) item.quality = 50
         item.sellIn--
     }
-
 }
-

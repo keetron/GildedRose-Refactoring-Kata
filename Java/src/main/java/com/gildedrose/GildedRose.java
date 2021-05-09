@@ -24,10 +24,15 @@ class GildedRose {
     }
 
     private void updateAgedBrie(Item brie) {
-        brie.sellIn--;
-        if (brie.quality < 50) {
+        if (brie.sellIn >= 0) {
             brie.quality++;
+        } else {
+            brie.quality = brie.quality + 2;
         }
+        if (brie.quality > 50) {
+            brie.quality = 50;
+        }
+        brie.sellIn--;
     }
 
     private void updateBackstagePasses(Item pass) {
@@ -44,10 +49,7 @@ class GildedRose {
     }
 
     private void updateSulfuras(Item sulfuras) {
-        //sulfuras does not need to be updated or sold, setting sellIn to 0
-        sulfuras.sellIn = 0;
-        //for good measure, set quality to 80
-        sulfuras.quality = 80;
+        sulfuras.sellIn--;
     }
 
     private void updateConjured(Item item) {

@@ -36,6 +36,16 @@ internal class GildedRoseTest {
     }
 
     @Test
+    fun commonItemSellDateTodayZeroQuality_notBelowZero() {
+        val items = arrayOf(Item("Common Pants", 0, 0))
+        val app = GildedRose(items)
+        app.updateQuality()
+        assertEquals("Common Pants", app.items[0].name)
+        assertEquals(-1, app.items[0].sellIn)
+        assertEquals(0, app.items[0].quality)
+    }
+
+    @Test
     fun commonItemNegativeSellDateZeroQuality_NoQualityDegrades() {
         val items = arrayOf(Item("Common Pants", -3, 0))
         val app = GildedRose(items)
@@ -96,22 +106,22 @@ internal class GildedRoseTest {
     }
 
     @Test
-    fun sulfurasNegativeSellDateQuality80_SellBy0Quality80() {
+    fun sulfurasNegativeSellBy_noQualityDecrease() {
         val items = arrayOf(Item("Sulfuras, Hand of Ragnaros", -3, 80))
         val app = GildedRose(items)
         app.updateQuality()
         assertEquals("Sulfuras, Hand of Ragnaros", app.items[0].name)
-        assertEquals(-3, app.items[0].sellIn)
+        assertEquals(-4, app.items[0].sellIn)
         assertEquals(80, app.items[0].quality)
     }
 
     @Test
-    fun sulfurasPositiveSellDateQuality80_SellBy0Quality80() {
+    fun sulfurasPositiveSellBy_noQualityDecrease() {
         val items = arrayOf(Item("Sulfuras, Hand of Ragnaros", 3, 80))
         val app = GildedRose(items)
         app.updateQuality()
         assertEquals("Sulfuras, Hand of Ragnaros", app.items[0].name)
-        assertEquals(3, app.items[0].sellIn)
+        assertEquals(2, app.items[0].sellIn)
         assertEquals(80, app.items[0].quality)
     }
 
@@ -194,7 +204,34 @@ internal class GildedRoseTest {
         assertEquals(4, app.items[0].sellIn)
         assertEquals(0, app.items[0].quality)
     }
-    
+
+    @Test
+    fun multipleItemsHandledCorrectly(){
+        val items = arrayOf(
+            Item("Conjured Muffin", 5, 10),
+            Item("Backstage passes to a Rammstein concert", 5, 10),
+            Item("Sulfuras, the Extinguished Hand", 5, 80),
+            Item("Aged Brie", 5, 10),
+            Item("plain cloth pants", 5, 10),
+        )
+        val app = GildedRose(items)
+        app.updateQuality()
+        assertEquals("Conjured Muffin", app.items[0].name)
+        assertEquals(4, app.items[0].sellIn)
+        assertEquals(8, app.items[0].quality)
+        assertEquals("Backstage passes to a Rammstein concert", app.items[1].name)
+        assertEquals(4, app.items[1].sellIn)
+        assertEquals(13, app.items[1].quality)
+        assertEquals("Sulfuras, the Extinguished Hand", app.items[2].name)
+        assertEquals(4, app.items[2].sellIn)
+        assertEquals(80, app.items[2].quality)
+        assertEquals("plain cloth pants", app.items[4].name)
+        assertEquals(4, app.items[4].sellIn)
+        assertEquals(9, app.items[4].quality)
+        assertEquals("Aged Brie", app.items[3].name)
+        assertEquals(4, app.items[3].sellIn)
+        assertEquals(11, app.items[3].quality)
+    }
 }
 
 
