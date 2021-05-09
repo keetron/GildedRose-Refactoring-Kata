@@ -155,9 +155,46 @@ internal class GildedRoseTest {
         assertEquals(0, app.items[0].quality)
     }
 
+    @Test
+    fun conjuredItemSellByPositiveQuality10_Quality8() {
+        val items = arrayOf(Item("Conjured Mana Brownie", 5, 10))
+        val app = GildedRose(items)
+        app.updateQuality()
+        assertEquals("Conjured Mana Brownie", app.items[0].name)
+        assertEquals(4, app.items[0].sellIn)
+        assertEquals(8, app.items[0].quality)
+    }
 
+    @Test
+    fun conjuredItemSellByNegativeQuality10_Quality6() {
+        val items = arrayOf(Item("Conjured Mana Cake", -5, 10))
+        val app = GildedRose(items)
+        app.updateQuality()
+        assertEquals("Conjured Mana Cake", app.items[0].name)
+        assertEquals(-6, app.items[0].sellIn)
+        assertEquals(6, app.items[0].quality)
+    }
 
+    @Test
+    fun conjuredItemSellByNegativeQuality0_Quality0() {
+        val items = arrayOf(Item("Conjured Sourdough", -5, 0))
+        val app = GildedRose(items)
+        app.updateQuality()
+        assertEquals("Conjured Sourdough", app.items[0].name)
+        assertEquals(-6, app.items[0].sellIn)
+        assertEquals(0, app.items[0].quality)
+    }
 
+    @Test
+    fun conjuredItemSellByPositiveQuality0_Quality0() {
+        val items = arrayOf(Item("Conjured Muffin", 5, 0))
+        val app = GildedRose(items)
+        app.updateQuality()
+        assertEquals("Conjured Muffin", app.items[0].name)
+        assertEquals(4, app.items[0].sellIn)
+        assertEquals(0, app.items[0].quality)
+    }
+    
 }
 
 
